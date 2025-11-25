@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Rides History</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Travelix Project">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+    <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="styles/elements_styles.css">
+    <link rel="stylesheet" type="text/css" href="styles/elements_responsive.css">
+    <style>
+.accordion {
+  background-color: #f9f9f9;
+  cursor: pointer;
+  padding: 15px 20px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.accordion.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.accordion_panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  background-color: white;
+  padding: 0 20px;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  border-radius: 0 0 5px 5px;
+}
+
+.accordion.active + .accordion_panel {
+  max-height: 500px;
+  padding: 15px 20px;
+}
+</style>
+</head>
+
+<body>
+
+    <div class="super_container">
+
+        <!-- Header -->
+
+        <header class="header">
+
+            <!-- Top Bar -->
+
+            <div class="top_bar">
+                <div class="container">
+                    <div class="row">
+                        <div class="col d-flex flex-row">
+                            <div class="social">
+                                <ul class="social_list">
+                                    <li class="social_list_item"><a href="#"><i class="fa fa-facebook"
+                                                aria-hidden="true"></i></a></li>
+                                    <li class="social_list_item"><a href="#"><i class="fa fa-twitter"
+                                                aria-hidden="true"></i></a></li>
+                                    <li class="social_list_item"><a href="#"><i class="fa fa-linkedin"
+                                                aria-hidden="true"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Navigation -->
+
+            <nav class="main_nav">
+                <div class="container">
+                    <div class="row">
+                        <div class="col main_nav_col d-flex flex-row align-items-center justify-content-start">
+                            <div class="logo_container">
+                                <div class="logo"><a href="#"><img src="images/logo.png" alt="">GoBus</a></div>
+                            </div>
+                            <div class="main_nav_container ml-auto">
+                                <ul class="main_nav_list">
+                                    <li class="main_nav_item"><a href="index.html">home</a></li>
+                                    <li class="main_nav_item"><a href="#">history</a></li>
+                                    <li class="main_nav_item"><a href="routes.html">routes</a></li>
+                                    <li class="main_nav_item"><a href="contact.html">contact</a></li>
+                                </ul>
+                            </div>
+                            <div class="content_search ml-lg-0 ml-auto">
+                            </div>
+
+                            <form id="search_form" class="search_form bez_1">
+                                <input type="search" class="search_content_input bez_1">
+                            </form>
+
+                            <div class="hamburger">
+                                <i class="fa fa-bars trans_200"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+        </header>
+
+        <div class="menu trans_500">
+            <div class="menu_content d-flex flex-column align-items-center justify-content-center text-center">
+                <div class="menu_close_container">
+                    <div class="menu_close"></div>
+                </div>
+                <div class="logo menu_logo"><a href="#"><img src="images/logo.png" alt=""></a></div>
+                <ul>
+                    <li class="menu_item"><a href="index.html">home</a></li>
+                    <li class="menu_item"><a href="#">history</a></li>
+                    <li class="menu_item"><a href="#">routes</a></li>
+                    <li class="menu_item"><a href="contact.html">contact us</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Home -->
+
+        <div class="home">
+            <div class="home_background parallax-window" data-parallax="scroll"
+                data-image-src="images/about_background.jpg"></div>
+            <div class="home_content">
+                <div class="home_title">Your Rides</div>
+            </div>
+        </div>
+
+
+<!-- Elements -->
+        <div class="elements">
+            <div class="container">
+
+                <!-- Progress Bars and Accordions -->
+                <div class="milestones">
+                    <div class="row milestones_container">
+
+                        <!-- Milestone -->
+                        <div class="col-lg-3 milestone_col">
+                            <div class="milestone text-center">
+                                <div class="elements_title">Current Rides</div>
+                            </div>
+                        </div>
+
+                        <!-- Milestone -->
+                        <div class="col-lg-3 milestone_col">
+                            <div class="milestone text-center">
+                            </div>
+                        </div>
+
+                        <!-- Milestone -->
+                        <div class="col-lg-3 milestone_col">
+                            <div class="milestone text-center">
+                            </div>
+                        </div>
+
+                        <!-- Milestone -->
+                        <div class="col-lg-3 milestone_col">
+                            <div class="milestone text-center">
+                                <!--div class="milestone_icon"><img src="images/milestone_4.png" alt="">
+                                </div>
+                                <div class="milestone_counter" data-end-value="127">0</div>
+                                <div class="milestone_text">Total Rides</div-->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Current Rides Section -->
+                <div class="row" style="margin-bottom: 50px; margin-top: 50px;">
+                    <div class="col-lg-5">
+                        <!-- Accordions -->
+                        <div class="elements_accordions">
+                            <div class="accordion_container" id="upcoming-trips">
+                                <p>Loading...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Previous Rides Section -->
+                <div class="row" style="margin-bottom: 50px;">
+                    <div class="col-lg-12">
+                        <div class="elements_title">Previous Rides</div>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-bottom: 100px;">
+                    <div class="col-lg-5">
+                        <!-- Accordions -->
+                        <div class="elements_accordions">
+                            <div class="accordion_container" id="previous-trips">
+                                <p>Loading...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+
+                    <!-- Footer Column -->
+                    <div class="col-lg-3 footer_column">
+                        <div class="footer_col">
+                            <div class="footer_content footer_about">
+                                <div class="logo_container footer_logo">
+                                    <div class="logo"><a href="#"><img src="images/logo.png" alt="">GoBus</a></div>
+                                </div>
+                                <p class="footer_about_text">We make group travel easy and comfortable. With modern
+                                    buses, professional drivers, and flexible booking, your journey is safe and
+                                    hassle-free. Ride with us for a smooth, reliable trip every time.</p>
+                                <ul class="footer_social_list">
+                                    <li class="footer_social_item"><a href="#"><i class="fa fa-pinterest"></i></a>
+                                    </li>
+                                    <li class="footer_social_item"><a href="#"><i class="fa fa-facebook-f"></i></a>
+                                    </li>
+                                    <li class="footer_social_item"><a href="#"><i class="fa fa-twitter"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Footer Column -->
+                    <div class="col-lg-3 footer_column">
+
+                    </div>
+
+                    <!-- Footer Column -->
+                    <div class="col-lg-3 footer_column">
+                        <div class="footer_col">
+
+                        </div>
+                    </div>
+                    <!-- Footer Column -->
+                    <div class="col-lg-3 footer_column">
+                        <div class="footer_col">
+                            <div class="footer_title">contact info</div>
+                            <div class="footer_content footer_contact">
+                                <ul class="contact_info_list">
+                                    <li class="contact_info_item d-flex flex-row">
+                                        <div>
+                                            <div class="contact_info_icon"><img src="images/placeholder.svg" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="contact_info_text">205 Ibrahimya Street, Alexandria, Egypt</div>
+                                    </li>
+                                    <li class="contact_info_item d-flex flex-row">
+                                        <div>
+                                            <div class="contact_info_icon"><img src="images/phone-call.svg" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="contact_info_text">+201234567899</div>
+                                    </li>
+                                    <li class="contact_info_item d-flex flex-row">
+                                        <div>
+                                            <div class="contact_info_icon"><img src="images/message.svg" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="contact_info_text"><a
+                                                href="mailto:contactme@gmail.com?Subject=Hello"
+                                                target="_top">gobus@gmail.com</a></div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </footer>
+
+        <!-- Copyright -->
+
+        <div class="copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 order-lg-1 order-2  ">
+                        <div class="copyright_content d-flex flex-row align-items-center">
+                            <div>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                Copyright &copy;
+                                <script>document.write(new Date().getFullYear());</script> All rights reserved |
+                                This
+                                template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a
+                                    href="https://colorlib.com" target="_blank">Colorlib</a>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 order-lg-2 order-1">
+                        <div class="footer_nav_container d-flex flex-row align-items-center justify-content-lg-end">
+                            <div class="footer_nav">
+                                <ul class="footer_nav_list">
+                                    <li class="footer_nav_item"><a href="index.html">home</a></li>
+                                    <li class="footer_nav_item"><a href="history.html">routes</a></li>
+                                    <li class="footer_nav_item"><a href="contact.html">contact us</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const response = await fetch(`/api/user-trips`, {
+            credentials: "include"
+        });
+
+        if (response.status === 401) {
+            alert("Your session has expired. Please log in again.");
+            window.location.href = "/login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const { upcoming, previous } = data;
+
+        renderTrips(upcoming, "upcoming-trips");
+        renderTrips(previous, "previous-trips");
+
+    } catch (err) {
+        console.error("Failed to fetch trips:", err);
+
+        const upcomingContainer = document.getElementById("upcoming-trips");
+        const previousContainer = document.getElementById("previous-trips");
+
+        if (upcomingContainer) {
+            upcomingContainer.innerHTML = "<p>Error loading upcoming trips.</p>";
+        }
+        if (previousContainer) {
+            previousContainer.innerHTML = "<p>Error loading previous trips.</p>";
+        }
+    }
+
+    function renderTrips(trips, containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        container.innerHTML = "";
+
+        if (!trips || !trips.length) {
+            container.innerHTML = "<p>No trips found.</p>";
+            return;
+        }
+
+        const accordionId = `${containerId}-accordion`;
+        const wrapper = document.createElement("div");
+        wrapper.id = accordionId;
+
+        trips.forEach((trip, index) => {
+            const tripId = `${accordionId}-item-${index}`;
+            wrapper.innerHTML += `
+                <div class="card">
+                    <div class="card-header" id="${tripId}-heading">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link ${index !== 0 ? 'collapsed' : ''}" 
+                                    data-toggle="collapse" 
+                                    data-target="#${tripId}-collapse" 
+                                    aria-expanded="${index === 0}" 
+                                    aria-controls="${tripId}-collapse">
+                                Trip ${trip.trip_id}
+                            </button>
+                        </h5>
+                    </div>
+
+                    <div id="${tripId}-collapse" class="collapse ${index === 0 ? 'show' : ''}" 
+                         aria-labelledby="${tripId}-heading" 
+                         data-parent="#${accordionId}">
+                        <div class="card-body">
+                            <strong>Source:</strong> ${trip.source || 'N/A'}<br>
+                            <strong>Destination:</strong> ${trip.destination || 'N/A'}<br>
+                            <strong>Departure:</strong> ${formatDate(trip.departure_time)}<br>
+                            <strong>Arrival:</strong> ${formatDate(trip.arrival_time)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.appendChild(wrapper);
+    }
+
+    function formatDate(dateStr) {
+        if (!dateStr) return 'N/A';
+        try {
+            const date = new Date(dateStr);
+            return date.toLocaleString();
+        } catch (error) {
+            return 'Invalid Date';
+        }
+    }
+});
+</script>
+
+
+
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="styles/bootstrap4/popper.js"></script>
+    <script src="styles/bootstrap4/bootstrap.min.js"></script>
+    <script src="plugins/greensock/TweenMax.min.js"></script>
+    <script src="plugins/greensock/TimelineMax.min.js"></script>
+    <script src="plugins/scrollmagic/ScrollMagic.min.js"></script>
+    <script src="plugins/greensock/animation.gsap.min.js"></script>
+    <script src="plugins/greensock/ScrollToPlugin.min.js"></script>
+    <script src="plugins/progressbar/progressbar.min.js"></script>
+    <script src="plugins/jquery-circle-progress-1.2.2/circle-progress.js"></script>
+    <script src="plugins/parallax-js-master/parallax.min.js"></script>
+    <script src="js/elements_custom.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,61 @@
+
+CREATE DATABASE bus_reservation_system;
+USE bus_reservation_system;
+
+
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE buses (
+    bus_id INT AUTO_INCREMENT PRIMARY KEY,
+    plate_id VARCHAR(100) NOT NULL,
+    total_seats INT NOT NULL
+);
+
+CREATE TABLE trips (
+    trip_id INT AUTO_INCREMENT PRIMARY KEY,
+    bus_id INT NOT NULL,
+    trip_date DATE NOT NULL,
+    source VARCHAR(100) NOT NULL,
+    destination VARCHAR(100) NOT NULL,
+    departure_time TIME NOT NULL,
+    arrival_time TIME NOT NULL,
+    tier ENUM('basic', 'standard', 'premium', 'elite') NOT NULL DEFAULT 'basic',
+    seats_left INT NOT NULL,
+    trip_price FLOAT NOT NULL,
+    FOREIGN KEY (bus_id) REFERENCES buses(bus_id)
+);
+
+
+CREATE TABLE reservations (
+    reservation_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    trip_id INT NOT NULL,
+    seat_number VARCHAR(100) NOT NULL,
+    booking_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    meal VARCHAR(100),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (trip_id) REFERENCES trips(trip_id),
+    UNIQUE (trip_id, seat_number)  -- To avoid double booking same seat
+);
+
+
+-- so that default seats_left  = bus.total_seats
+DELIMITER //
+
+CREATE TRIGGER set_seats_left_before_insert
+BEFORE INSERT ON trips
+FOR EACH ROW
+BEGIN
+    DECLARE total INT;
+    SELECT total_seats INTO total FROM buses WHERE bus_id = NEW.bus_id;
+    SET NEW.seats_left = total;
+END;
+//
+
+DELIMITER ;

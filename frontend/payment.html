@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: url('images/bus1.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+        .payment-container {
+            max-width: 600px;
+            margin: 100px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d2d2d;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-check-label {
+            font-size: 16px;
+            color: #2d2d2d;
+        }
+        .credit-card-fields {
+            display: none;
+            margin-top: 20px;
+            color: #2d2d2d;
+        }
+        .form-control {
+            border-radius: 8px;
+            box-shadow: none;
+        }
+        .btn-primary {
+            background-color: #fa9e1b;
+            border: none;
+            padding: 10px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #e18f18;
+        }
+    </style>
+</head>
+<body>
+<div class="overlay"></div>
+<div class="container">
+    <div class="payment-container">
+        <div class="section-title">Payment Method</div>
+
+        <form id="paymentForm">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="credit">
+                <label class="form-check-label" for="creditCard">Credit Card</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="cash" value="cash">
+                <label class="form-check-label" for="cash">Cash</label>
+            </div>
+
+            <div class="credit-card-fields" id="cardDetails">
+                <div class="form-group mt-3">
+                    <label for="cardName">Name on Card</label>
+                    <input type="text" class="form-control" id="cardName" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="expiryDate">Expiry Date</label>
+                        <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="cvc">CVC</label>
+                        <input type="text" class="form-control" id="cvc" placeholder="123">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-4">Confirm Payment</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const creditCardRadio = document.getElementById("creditCard");
+    const cashRadio = document.getElementById("cash");
+    const cardDetails = document.getElementById("cardDetails");
+    const params = new URLSearchParams(window.location.search);
+
+
+    creditCardRadio.addEventListener("change", function () {
+        cardDetails.style.display = "block";
+    });
+
+    cashRadio.addEventListener("change", function () {
+        cardDetails.style.display = "none";
+    });
+
+    document.getElementById("paymentForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+        // Simulating retrieval from previous laptop (e.g., via query params or sessionStorage)
+        const tripId = params.get('trip_id') 
+        const seatNumber = params.get('seat');
+        const meal = params.get('meal');
+        const userId = sessionStorage.getItem("userId");
+
+        console.log("Trip ID:", tripId);
+        console.log("Seat Number:", seatNumber);
+        console.log("Meal:", meal);
+        console.log("User ID:", userId);
+        if (!tripId || !seatNumber || !meal ) {
+            alert("Missing trip details. Please try again.");
+            return;
+        }
+
+        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+        const payload = {
+            trip_id: tripId,
+            seat_number: seatNumber,
+            meal: meal,
+            user_id: userId,
+            payment_method: paymentMethod
+        };
+
+        if (paymentMethod === "credit") {
+            payload.card_name = document.getElementById("cardName").value;
+            payload.card_number = document.getElementById("cardNumber").value;
+            payload.expiry_date = document.getElementById("expiryDate").value;
+            payload.cvc = document.getElementById("cvc").value;
+        }
+        try {
+        // 1. Check login status
+        const sessionRes = await fetch("/api/check-session");
+        const sessionData = await sessionRes.json();
+
+        if (!sessionData.loggedIn) {
+            alert("You need to be logged in to make a reservation.");
+            // direct user to login page
+            window.location.href = "login.html"; // Redirect to login page
+            return; // Exit if not logged in
+        }
+
+        // 2. If logged in, send reservation request
+        const reserveRes = await fetch("/api/reserve-trip", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const reserveData = await reserveRes.json();
+
+        if (reserveRes.ok) {
+            alert("Payment confirmed. Reservation successful!");
+            window.location.href = "index.html"; // Redirect to home page
+        } else {
+            alert("Reservation failed: " + reserveData.message);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred while processing your payment.");
+    }
+    });
+</script>
+
+</body>
+</html>

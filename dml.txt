@@ -1,0 +1,48 @@
+-- Insert 5 buses
+INSERT INTO buses (plate_id, total_seats) VALUES 
+('ABC-123', 40),
+('XYZ-456', 50),
+('LMN-789', 30),
+('JKL-321', 60),
+('DEF-654', 45);
+
+-- Insert 5 trips for each bus
+-- For Bus 1
+INSERT INTO trips (bus_id, trip_date, source, destination, departure_time, arrival_time, tier, seats_left, trip_price) VALUES
+(1, '2025-06-01', 'City A', 'City B', '08:00:00', '10:00:00', 'basic', 40, 25),
+(1, '2025-06-02', 'City A', 'City C', '11:00:00', '13:30:00', 'standard', 40, 35),
+(1, '2025-06-03', 'City B', 'City A', '14:00:00', '16:00:00', 'premium', 40, 45),
+(1, '2025-06-04', 'City C', 'City A', '17:00:00', '19:30:00', 'elite', 40, 70),
+(1, '2025-06-05', 'City B', 'City C', '20:00:00', '22:00:00', 'standard', 40, 30);
+
+-- For Bus 2
+INSERT INTO trips (bus_id, trip_date, source, destination, departure_time, arrival_time, tier, seats_left, trip_price) VALUES
+(2, '2025-06-01', 'City D', 'City E', '09:00:00', '11:30:00', 'basic', 50, 25),
+(2, '2025-06-02', 'City E', 'City D', '12:00:00', '14:30:00', 'standard', 50, 35),
+(2, '2025-06-03', 'City D', 'City F', '15:00:00', '17:30:00', 'premium', 50, 45),
+(2, '2025-06-04', 'City F', 'City D', '18:00:00', '20:30:00', 'elite', 50, 75),
+(2, '2025-06-05', 'City E', 'City F', '21:00:00', '23:00:00', 'standard', 50, 40);
+
+-- For Bus 3
+INSERT INTO trips (bus_id, trip_date, source, destination, departure_time, arrival_time, tier, seats_left, trip_price) VALUES
+(3, '2025-06-01', 'Town A', 'Town B', '07:00:00', '08:45:00', 'basic', 30, 20),
+(3, '2025-06-02', 'Town B', 'Town A', '09:00:00', '10:45:00', 'standard', 30, 30),
+(3, '2025-06-03', 'Town A', 'Town C', '11:00:00', '12:30:00', 'premium', 30, 40),
+(3, '2025-06-04', 'Town C', 'Town A', '13:00:00', '14:30:00', 'elite', 30, 65),
+(3, '2025-06-05', 'Town B', 'Town C', '15:00:00', '16:30:00', 'standard', 30, 25);
+
+-- For Bus 4
+INSERT INTO trips (bus_id, trip_date, source, destination, departure_time, arrival_time, tier, seats_left, trip_price) VALUES
+(4, '2025-06-01', 'Metro A', 'Metro B', '06:30:00', '09:00:00', 'basic', 60, 25),
+(4, '2025-06-02', 'Metro B', 'Metro A', '09:30:00', '12:00:00', 'standard', 60, 35),
+(4, '2025-06-03', 'Metro A', 'Metro C', '12:30:00', '15:00:00', 'premium', 60, 45),
+(4, '2025-06-04', 'Metro C', 'Metro A', '15:30:00', '18:00:00', 'elite', 60, 80),
+(4, '2025-06-05', 'Metro B', 'Metro C', '18:30:00', '21:00:00', 'standard', 60, 40);
+
+-- For Bus 5
+INSERT INTO trips (bus_id, trip_date, source, destination, departure_time, arrival_time, tier, seats_left, trip_price) VALUES
+(5, '2025-06-01', 'Village A', 'Village B', '07:15:00', '09:15:00', 'basic', 45, 25),
+(5, '2025-06-02', 'Village B', 'Village A', '09:45:00', '11:45:00', 'standard', 45,35),
+(5, '2025-06-03', 'Village A', 'Village C', '12:15:00', '14:15:00', 'premium', 45, 45),
+(5, '2025-06-04', 'Village C', 'Village A', '14:45:00', '16:45:00', 'elite', 45, 60),
+(5, '2025-06-05', 'Village B', 'Village C', '17:15:00', '19:15:00', 'standard', 45, 35);

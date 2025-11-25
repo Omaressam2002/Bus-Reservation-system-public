@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bus Services</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: url('images/bus2.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+        .services-container {
+            max-width: 800px;
+            margin: 100px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
+            color: #2d2d2d;
+        }
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .seat {
+            width: 40px;
+            height: 40px;
+            background-color: #fa9e1b;
+            margin: 5px;
+            border-radius: 6px;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .seat:hover {
+            background-color: #e18f18;
+        }
+        .seat.selected {
+            background-color: #007bff;
+            color: white;
+        }
+        .seat.reserved {
+            background-color: #888 !important;
+            cursor: not-allowed;
+        }
+        .seat-row {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .aisle {
+            width: 20px;
+            display: inline-block;
+        }
+        .btn-primary {
+            background-color: #fa9e1b;
+            border: none;
+            padding: 10px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #e18f18;
+        }
+    </style>
+</head>
+<body>
+<div class="overlay"></div>
+<div class="container">
+    <div class="services-container">
+        <div class="section-title">Select Your Bus Services</div>
+        <form id="services_form">
+            <strong><p>Select a Seat:</p></strong>
+            <div class="mb-3">
+                <div class="d-flex align-items-center mb-2">
+                    <div style="width: 30px; height: 30px; background-color: #fa9e1b; border-radius: 6px; margin-right: 10px;"></div> Available
+                </div>
+                <div class="d-flex align-items-center">
+                    <div style="width: 30px; height: 30px; background-color: #888; border-radius: 6px; margin-right: 10px;"></div> Reserved
+                </div>
+            </div>
+            
+            <div id="bus-layout"></div>
+            <br>
+            <input type="hidden" id="selected-seat" name="seat">
+            <p>Selected Seat: <span id="seat-display">None</span></p>
+
+            <div class="form-group">
+                <label for="meal_type">Meal Type:</label>
+                <select id="meal_type" class="form-control" required>
+                    <option value="">-- Choose Meal --</option>
+                    <option value="chicken">Chicken</option>
+                    <option value="beef">Beef</option>
+                    <option value="noodles">Noodles</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit Preferences</button>
+        </form>
+    </div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const tripId = params.get('trip_id');
+const layout = document.getElementById('bus-layout');
+
+async function renderSeats() {
+    if (!tripId) return alert('Trip ID missing in URL');
+
+    try {
+        const res = await fetch(`http://localhost:3000/api/reserved-seats?trip_id=${tripId}`);
+        const data = await res.json();
+
+        const reserved = Array.isArray(data.reserved) ? data.reserved : [];
+        const totalSeats = data.totalSeats || 0;
+
+        console.log('totalSeats:', totalSeats);
+
+        const firstClassSeats = 8
+        const businessClassSeats = 12
+        const economyClassSeats = totalSeats - firstClassSeats - businessClassSeats;
+        console.log('firstClassSeats:', firstClassSeats);
+        console.log('businessClassSeats:', businessClassSeats);
+        console.log('economyClassSeats:', economyClassSeats);
+
+        const renderClassRows = (seats, startIndex, label, seatsPerRow = 4) => {
+            const rows = [];
+            const rowCount = Math.ceil(seats / seatsPerRow);
+            for (let i = 0; i < rowCount; i++) {
+                const rowNum = startIndex + i;
+                rows.push(`<div class='seat-row'>
+                    <div class='seat' title='${label}${rowNum}A' data-seat='${label}${rowNum}A'></div>
+                    <div class='seat' title='${label}${rowNum}B' data-seat='${label}${rowNum}B'></div>
+                    <div class='aisle'></div>
+                    <div class='seat' title='${label}${rowNum}C' data-seat='${label}${rowNum}C'></div>
+                    <div class='seat' title='${label}${rowNum}D' data-seat='${label}${rowNum}D'></div>
+                </div>`);
+            }
+            rows.push('<br><br>');
+            return rows;
+        };
+
+        const renderEconomyRows = (seats, startIndex, label) => {
+            const seatsPerRow = seats % 4 === 0 ? 4 : 5;
+            const rows = [];
+            const rowCount = Math.ceil(seats / seatsPerRow);
+            for (let i = 0; i < rowCount; i++) {
+                const rowNum = startIndex + i;
+                rows.push(`<div class='seat-row'>
+                    <div class='seat' title='${label}${rowNum}A' data-seat='${label}${rowNum}A'></div>
+                    <div class='seat' title='${label}${rowNum}B' data-seat='${label}${rowNum}B'></div>
+                    <div class='aisle'></div>
+                    <div class='seat' title='${label}${rowNum}C' data-seat='${label}${rowNum}C'></div>
+                    <div class='seat' title='${label}${rowNum}D' data-seat='${label}${rowNum}D'></div>
+                    ${seatsPerRow === 5 ? `<div class='seat' title='${label}${rowNum}E' data-seat='${label}${rowNum}E'></div>` : ''}
+                </div>`);
+            }
+            return rows;
+        };
+
+
+        const firstClassRows = renderClassRows(firstClassSeats, 1, 'F');
+        const businessClassRows = renderClassRows(businessClassSeats, Math.ceil(firstClassSeats / 4) + 1, 'B');
+        const economyClassRows = renderEconomyRows(economyClassSeats, Math.ceil(firstClassSeats / 4) + Math.ceil(businessClassSeats / 4) + 1, 'E');
+
+        layout.innerHTML = [...firstClassRows, ...businessClassRows, ...economyClassRows].join('');
+
+        reserved.forEach(seatCode => {
+            const seat = document.querySelector(`.seat[data-seat="${seatCode}"]`);
+            if (seat) {
+                seat.classList.add('reserved');
+                seat.style.pointerEvents = 'none';
+            }
+        });
+
+        document.querySelectorAll('.seat:not(.reserved)').forEach(seat => {
+            seat.addEventListener('click', function () {
+                document.querySelectorAll('.seat').forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+                const selectedSeat = this.getAttribute('data-seat');
+                document.getElementById('selected-seat').value = selectedSeat;
+                document.getElementById('seat-display').textContent = selectedSeat;
+            });
+        });
+    } catch (error) {
+        console.error('Failed to fetch reserved seats:', error);
+    }
+}
+
+window.addEventListener('DOMContentLoaded', renderSeats);
+
+document.getElementById('services_form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const selectedSeat = document.getElementById('selected-seat').value;
+    const meal = document.getElementById('meal_type').value;
+    if (!selectedSeat || !meal) return alert('Please select both seat and meal');
+
+    const query = new URLSearchParams({ trip_id: tripId, seat: selectedSeat, meal }).toString();
+    window.location.href = `payment.html?${query}`;
+});
+</script>
+
+</body>
+</html>
